@@ -17,8 +17,8 @@ jobs:
             
             - name: Build docker image
               run: |
-                docker build -t ${{ secrets.DOCKER_USERNAME }}/devops-ci:v2 .
+                docker build -t ${{ secrets.DOCKER_USERNAME }}/devops-ci:v1 .
             - name: push to docker hub
               run: |
-                docker push ${{ secrets.DOCKER_TOKEN }}/devops-ci:v2
+                docker push ${{ secrets.DOCKER_TOKEN }}/devops-ci:v1
               
