@@ -15,7 +15,6 @@ jobs:
         run: pip install -r requirements.txt
       - name: run the test
         run: pytest
-  
   docker:
     needs: test
     runs-on: ubuntu-latest
