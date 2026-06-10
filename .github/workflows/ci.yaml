@@ -1,3 +1,43 @@
 name: full flow 2 practice
 on:
     push:
+        branches: [full_flow2]
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: pull code
+              uses: actions/checkout@v4
+            - name: stetup the python
+              uses: actions/setup-python@v5
+              with:
+                 python-version: '3.12'
+                 cache: 'pip'
+            - name: upgrade
+              run: pip install --upgrade pip
+            - name: install requirements
+              run: pip install -r requirements.txt
+            - name: run the test
+              run: pytest
+    
+    docker_setup:
+        needs: test
+        runs-on: ubuntu-latest
+        steps:
+            - name: code pull for docker
+              uses: actions/checkout@v4
+            - name: docker login
+              uses:  docker/login-action@v3
+              with:
+               username: ${{ secrets.DOCKER_USERNAME }}
+               password: ${{ secrets.DOCKER_TOKEN }}
+            - name: docker buildx
+              uses: docker/setup-buildx-action@v3
+            - name: docker build and push
+              uses: docker/build-push-action@v6
+              with:
+                context: .
+                push: true
+                tags: ${{ secrets.DOCKER_USERNAME }}/full_flow:v1
+                cache-from: type=gha
+                cache-to: type=gha,mode=max
