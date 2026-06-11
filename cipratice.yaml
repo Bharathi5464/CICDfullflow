@@ -40,7 +40,12 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/devops-ci:v5
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/devops-ci:latest
+            ${{ secrets.DOCKER_USERNAME }}/devops-ci:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
          
   deploy_ec2:
     needs: docker
@@ -53,10 +58,13 @@ jobs:
            username: ${{ secrets.EC2_USER }}
            key: ${{ secrets.EC2_SSH_KEY }}
            script: |
-            docker pull  ${{ secrets.DOCKER_USERNAME }}/devops-ci:v5
+            docker pull  ${{ secrets.DOCKER_USERNAME }}/devops-ci:latest
    
             docker stop full-flowcon || true
    
             docker rm full-flowcon || true
    
-            docker run -d --name full-flowcon -p 80:5000  ${{ secrets.DOCKER_USERNAME }}/devops-ci:v5
+            docker run -d --name full-flowcon -p 80:5000  ${{ secrets.DOCKER_USERNAME }}/devops-ci:latest
+
+            echo "DEPLOYED: ${{ github.sha }}" > /home/ec2-user/current_version.txt
+            echo "Last Deployed $(date) - ${{ github.sha }}" >> /home/ec2-user/Lastdeployed_version.txt
