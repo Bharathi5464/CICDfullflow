@@ -5,7 +5,7 @@ app = Flask(__name__)    # Initialize the web application
 
 @app.route("/")          # Map the main website URL (/) to the home function
 def home():
-    return "Hello for DevOps CI Project! Running from the AWS Instance"  # Text shown on the website screen
+    return "Hello for DevOps CI Project! Running from the AWS Instance checking Rollabacks V5"  # Text shown on the website screen
 
 
 if __name__ == "__main__":

@@ -41,7 +41,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/devops-ci:latest
+            ${{ secrets.DOCKER_USERNAME }}/devops-ci:V5
             ${{ secrets.DOCKER_USERNAME }}/devops-ci:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
